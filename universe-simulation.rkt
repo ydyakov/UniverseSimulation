@@ -34,7 +34,7 @@
     (11 . 8)))
 
 (define random-universe
-  (for/list ([i 80])
+  (for/list ([i 120])
     (cons (random WIDTH) (random HEIGHT))))
 
 
@@ -107,8 +107,9 @@
     [(= choice 3) exploder-universe]
     [(= choice 4) random-universe]
     [(= choice 5)
-      (display "Въведи име на файл: ")
-      (load-universe (read-line))]
+     ;;(display "Въведи име на файл: ")
+     ;;(define filename (read-line))
+     (load-universe "universe.txt")]
     [else
      (displayln "Невалиден избор. Опитай пак.")
      (choose-universe)]))
