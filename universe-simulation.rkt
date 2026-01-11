@@ -43,6 +43,7 @@
 ;; ======================================
 
 (define (print-info)
+  (clear-console)
   (displayln "============================================")
   (displayln "")
   (displayln "      ТЕМА: Симулация на вселена")
@@ -153,14 +154,16 @@
   (filter (λ (c) (alive-next? c universe))
           candidates))
 
+(define (alive? x y universe)
+  (member (cons x y) universe))
+
 ;; ======================================
 ;; ТЕКСТОВА ВИЗУАЛИЗАЦИЯ
 ;; ======================================
 
-(define (alive? x y universe)
-  (member (cons x y) universe))
 
 (define (draw-universe universe steps)
+  (clear-console)
   (displayln (format "популация # ~a" steps))
   (newline)
   (for ([y (in-range HEIGHT)])
@@ -183,9 +186,7 @@
 ;; СТАРТ
 ;; ======================================
 
-(clear-console)
 (print-info)
 (define selected-universe (choose-universe))
-(clear-console)
 (simulate selected-universe 1)
 
