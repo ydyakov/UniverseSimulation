@@ -4,8 +4,8 @@
 ;; НАСТРОЙКИ НА СВЕТА
 ;; ======================================
 
-(define WIDTH 80)
-(define HEIGHT 50)
+(define WIDTH 60)
+(define HEIGHT 20)
 (define ALIVE "██")
 (define DEAD  "  ")
 
@@ -20,7 +20,9 @@
 ;; ======================================
 
 (define blinker-universe
-  '((14 . 7) (15 . 7) (16 . 7)))
+  '((14 . 7) (15 . 7) (16 . 7)
+    (20 . 7) (21 . 7) (22 . 7)
+    (15 . 18) (16 . 18) (17 . 18)))
 
 (define glider-universe
   '((1 . 0)
@@ -78,7 +80,7 @@
   (displayln "2 - Glider")
   (displayln "3 - Exploder")
   (displayln "4 - Random")
-  (displayln "5 - Зареждане от файл")
+  (displayln "5 - Зареждане от файл big-bang.txt")
   (displayln "==============================")
   (display "Вашият избор: "))
 
@@ -92,7 +94,7 @@
          (for/list ([y (in-range (length lines))])
            (define line (list-ref lines y))
            (for/list ([x (in-range (string-length line))]
-                      #:when (char=? (string-ref line x) #\█))
+                      #:when (char=? (string-ref line x) #\*))
              (cons x y)))))
 
 ;; ======================================
@@ -106,10 +108,8 @@
     [(= choice 2) glider-universe]
     [(= choice 3) exploder-universe]
     [(= choice 4) random-universe]
-    [(= choice 5)
-     ;;(display "Въведи име на файл: ")
-     ;;(define filename (read-line))
-     (load-universe "universe.txt")]
+    [(= choice 5)  
+     (load-universe "big-bang.txt")]
     [else
      (displayln "Невалиден избор. Опитай пак.")
      (choose-universe)]))
