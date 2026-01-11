@@ -6,8 +6,8 @@
 
 (define WIDTH 80)
 (define HEIGHT 50)
-(define ALIVE "█")
-(define DEAD  " ")
+(define ALIVE "██")
+(define DEAD  "  ")
 
 ;; ======================================
 ;; ПРЕДСТАВЯНЕ НА ДАННИ
@@ -39,23 +39,60 @@
 
 
 ;; ======================================
+;; ФУНКЦИЯ ЗА ННФО СЕКЦИЯТА
+;; ======================================
+
+(define (print-info)
+  (displayln "============================================")
+  (displayln "")
+  (displayln "      ТЕМА: Симулация на вселена")
+  (displayln "      Автор: Сиана Дякова")
+  (displayln "      Вид вселена: Game of Life")
+  (displayln "")
+  (displayln "      Симулацията представлява дискретна вселена от клетки, съставена от двумерна решетка от клетки.")
+  (displayln "      Всяка клетка може да бъде в едно от две състояния: жива или мъртва")
+  (displayln "      Състоянието на всяка клетка в следващото поколение се определя по следните правила:")
+  (displayln "      Жива клетка: остава жива, ако има 2 или 3 живи съседи")
+  (displayln "      Жива клетка: умира, ако има по-малко от 2 (изолация) или повече от 3 (пренаселеност) живи съседи")
+  (displayln "      Мъртва клетка: става жива, само ако има точно 3 живи съседи")
+  (displayln "")
+  (displayln "      *** За по-добра визуализация моля максимизирайте конзоноя прозорец :) ")
+  (displayln "")
+  (displayln "        Натиснете Enter за стартиране ")
+  (displayln "")
+  (displayln "============================================")
+  (read-line)
+  (clear-console)
+  )
+
+;; ======================================
 ;; ФУНКЦИЯ ЗА ИНСТРУКЦИИ И UI МЕНЮ
 ;; ======================================
 
 (define (print-menu)
+  (clear-console)
   (displayln "==============================")
-  (displayln "   ТЕМА: Симулация на вселена")
-  (displayln "   Автор: Сиана Дякова")
-  (displayln "   Вид: Game of Life")
-  (displayln "")
   (displayln "Изберете начална вселена:")
   (displayln "1 - Blinker")
   (displayln "2 - Glider")
   (displayln "3 - Exploder")
   (displayln "4 - Random")
+  (displayln "5 - Зареждане от файл")
   (displayln "==============================")
   (display "Вашият избор: "))
 
+
+;; ======================================
+;; ФУНКЦИЯ ЗА ЗАРЕЖДАНЕ НА BIG-BANG ОТ ФАЙЛ
+;; ======================================
+(define (load-universe filename)
+  (define lines (file->lines filename))
+  (apply append
+         (for/list ([y (in-range (length lines))])
+           (define line (list-ref lines y))
+           (for/list ([x (in-range (string-length line))]
+                      #:when (char=? (string-ref line x) #\█))
+             (cons x y)))))
 
 ;; ======================================
 ;; ФУНКЦИЯ (UI) ЗА ИЗБОР НА ВСЕЛЕНА
@@ -68,9 +105,19 @@
     [(= choice 2) glider-universe]
     [(= choice 3) exploder-universe]
     [(= choice 4) random-universe]
+    [(= choice 5)
+      (display "Въведи име на файл: ")
+      (load-universe (read-line))]
     [else
      (displayln "Невалиден избор. Опитай пак.")
      (choose-universe)]))
+
+
+;; ======================================
+;; ИЗЧИСТВАНЕ НА КОНСОЛАТА
+;; ======================================
+(define (clear-console)
+  (display "\033[2J\033[H"))
 
 ;; ======================================
 ;; ЛОГИКА НА GAME OF LIFE
@@ -113,32 +160,32 @@
 (define (alive? x y universe)
   (member (cons x y) universe))
 
-(define (draw-universe universe)
+(define (draw-universe universe steps)
+  (displayln (format "популация # ~a" steps))
+  (newline)
   (for ([y (in-range HEIGHT)])
     (for ([x (in-range WIDTH)])
       (display (if (alive? x y universe) ALIVE DEAD)))
     (newline)))
 
 ;; ======================================
-;; КОНЗОЛА + ВРЕМЕ
+;; СИМУЛАЦИЯ - ВРЕМЕ
 ;; ======================================
-
-(define (clear-console)
-  (display "\033[2J\033[H"))
-
+  
 (define (simulate universe steps)
-  (when (> steps 0)
+  (when (< steps 50)
     (clear-console)
-    (draw-universe universe)
+    (draw-universe universe steps)
     (sleep 1)
-    (simulate (step universe) (- steps 1))))
+    (simulate (step universe) (+ steps 1))))
 
 ;; ======================================
 ;; СТАРТ
 ;; ======================================
 
 (clear-console)
+(print-info)
 (define selected-universe (choose-universe))
 (clear-console)
-(simulate selected-universe 50)
+(simulate selected-universe 1)
 
