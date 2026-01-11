@@ -4,8 +4,8 @@
 ;; НАСТРОЙКИ НА СВЕТА
 ;; ======================================
 
-(define WIDTH 80)
-(define HEIGHT 50)
+(define WIDTH 30)
+(define HEIGHT 15)
 (define ALIVE "█")
 (define DEAD  " ")
 
@@ -15,62 +15,8 @@
 ;; Клетка = (x . y)
 ;; Вселена = списък от живи клетки
 
-;; ======================================
-;; ВСЕЛЕНИ 3 СТАНДАРТНИ И ЕДНА ПРОИЗВОЛНА
-;; ======================================
-
-(define blinker-universe
-  '((14 . 7) (15 . 7) (16 . 7)))
-
-(define glider-universe
-  '((1 . 0)
-    (2 . 1)
-    (0 . 2) (1 . 2) (2 . 2)))
-
-(define exploder-universe
-  '((10 . 5) (12 . 5)
-    (10 . 6) (12 . 6)
-    (10 . 7) (12 . 7)
-    (11 . 8)))
-
-(define random-universe
-  (for/list ([i 80])
-    (cons (random WIDTH) (random HEIGHT))))
-
-
-;; ======================================
-;; ФУНКЦИЯ ЗА ИНСТРУКЦИИ И UI МЕНЮ
-;; ======================================
-
-(define (print-menu)
-  (displayln "==============================")
-  (displayln "   ТЕМА: Симулация на вселена")
-  (displayln "   Автор: Сиана Дякова")
-  (displayln "   Вид: Game of Life")
-  (displayln "")
-  (displayln "Изберете начална вселена:")
-  (displayln "1 - Blinker")
-  (displayln "2 - Glider")
-  (displayln "3 - Exploder")
-  (displayln "4 - Random")
-  (displayln "==============================")
-  (display "Вашият избор: "))
-
-
-;; ======================================
-;; ФУНКЦИЯ (UI) ЗА ИЗБОР НА ВСЕЛЕНА
-;; ======================================
-(define (choose-universe)
-  (print-menu)
-  (define choice (read))
-  (cond
-    [(= choice 1) blinker-universe]
-    [(= choice 2) glider-universe]
-    [(= choice 3) exploder-universe]
-    [(= choice 4) random-universe]
-    [else
-     (displayln "Невалиден избор. Опитай пак.")
-     (choose-universe)]))
+(define initial-universe
+  '((14 . 7) (15 . 7) (16 . 7))) ; blinker
 
 ;; ======================================
 ;; ЛОГИКА НА GAME OF LIFE
@@ -137,8 +83,4 @@
 ;; СТАРТ
 ;; ======================================
 
-(clear-console)
-(define selected-universe (choose-universe))
-(clear-console)
-(simulate selected-universe 50)
-
+(simulate initial-universe 50)
